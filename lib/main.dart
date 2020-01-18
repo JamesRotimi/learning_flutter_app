@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import './question.dart';
+import './answer.dart';
+
 //void main() {
 //  runApp(MyApp());
 //}
@@ -11,28 +14,35 @@ class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return MyAppState();   // by returning a MyAppState object we have connected the two classes. The state hold the data that is used by the buildMethod.
+    return _MyAppState();   // by returning a MyAppState object we have connected the two classes. The state hold the data that is used by the buildMethod.
   }
 
 }
 
 
-class MyAppState extends State<MyApp> {  // this <MyApp> tells flutter that state<Myapp> and myapp are connected
-  var questionIndex = 0;
+class _MyAppState extends State<MyApp> {  // this <MyApp> tells flutter that state<Myapp> and myapp are connected
+  var _questionIndex = 0;
 
-  void answerQuestion () {
+  void _answerQuestion () {
     setState(() {
-      questionIndex = questionIndex + 1;
+      _questionIndex = _questionIndex + 1;
     });
 
-    print(questionIndex);
+    print(_questionIndex);
   }
 
   @override
   Widget build(BuildContext context) {
-    var questions = [
-      'What\'s your favourite colour?',
-      'What\'s your favourite animal?',
+    const questions = [
+      {'questionText': 'What\'s your favourite colour?',
+      'answers': ['Black','Red','Green', 'Blue']
+      },
+      {'questionText': 'What\'s your favourite animal?',
+        'answers': ['Tiger','Elepahnt','Bird', 'Cheetah']
+      },
+      {'questionText': 'who is your favourite Instructor?',
+        'answers': ['Rotimi','Clmbxr','Green', 'Blue']
+      }
     ];
     return MaterialApp(
       home: Scaffold(
@@ -42,10 +52,10 @@ class MyAppState extends State<MyApp> {  // this <MyApp> tells flutter that stat
         )),
         body: Column(
           children: [
-            Text(questions[questionIndex]),
-            RaisedButton(child: Text('Answer 1'), onPressed: answerQuestion), // We are passing the name of the function to on press not to the result hence we pass answerQuestion without ()- the name acts as a point to the function so that it only executed when the button is pressed and not simultaneously execute when initiated.
-            RaisedButton(child: Text('Answer 2'), onPressed: answerQuestion),
-            RaisedButton(child: Text('Answer 3'), onPressed: answerQuestion),
+            Question(questions[_questionIndex]['questionText']),
+            ...(questions[_questionIndex]['answers'] as List<String>).map((answer) {
+              return Answer(_answerQuestion, answer);
+            }).toList()
           ],
         ),
       ),
